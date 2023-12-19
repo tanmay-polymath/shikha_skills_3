@@ -21,6 +21,8 @@
     ]
   },
   "dependencies": {
+    "@radix-ui/react-label": "^2.0.2",
+    "@radix-ui/react-switch": "^1.0.3",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.0.0",
     "husky": "^8.0.3",

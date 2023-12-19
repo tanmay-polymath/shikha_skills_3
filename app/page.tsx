@@ -1,16 +1,21 @@
 'use client'
 
 import { useRef, useState } from "react"
+import { Label } from "@/components/ui/label"
+import { Switch } from "@/components/ui/switch"
 
 import { Skills, Analysis,Tag } from "./utils/types";
 
 import SkillTag from "./components/SkillTag";
+import { FileStack } from "lucide-react";
 
 export default function Home() {
 
   const textRef = useRef<HTMLTextAreaElement>(null);
   const [loading,setLoading] = useState<boolean>(false)
   const [currSkills,setCurrSkills] = useState<Analysis | null>(null)
+  const [filterSkills,setFilterSkills] = useState<Analysis | null>(null)
+  const [filterSelect,setFilterSelect] = useState<boolean>(false)
 
   const checkHandler = async () => {
     try {
@@ -142,7 +147,7 @@ export default function Home() {
       const obj: Analysis = {
         Cognitive: {
           score: "0",
-          tags: [...anaRes[1].split(`skills:`)[1].trim().replace(/\[|\]/g,'').split(',')]
+          tags: [...anaRes[1].split(`\"skills\":`)[1].split(`\"explanation\":`)[0].trim().replace(/\[|\]/g,'').split(',')]
             .filter((val) => val.trim().length > 5)
             .map((val) => {
               const t = val.trim().split(":")
@@ -152,11 +157,12 @@ export default function Home() {
                 score: parseInt(t[1])
               }
             })
-            .filter((val) => (val.score && val.score > 0))
+            .filter((val) => (val.score && val.score > 0)),
+            explanation: anaRes[1].split(`\"skills\":`)[1].split(`\"explanation\":`)[1].trim()
         },
         Collaboration: {
           score: "0",
-          tags: [...anaRes[4].split(`skills:`)[1].trim().replace(/\[|\]/g,'').split(',')]
+          tags: [...anaRes[4].split(`\"skills\":`)[1].split(`\"explanation\":`)[0].trim().replace(/\[|\]/g,'').split(',')]
             .filter((val) => val.trim().length > 5)
             .map((val) => {
               const t = val.trim().split(":")
@@ -166,11 +172,12 @@ export default function Home() {
                 score: parseInt(t[1])
               }
             })
-            .filter((val) => (val.score && val.score > 0))
+            .filter((val) => (val.score && val.score > 0)),
+            explanation: anaRes[4].split(`\"skills\":`)[1].split(`\"explanation\":`)[1].trim()
         },
         Communication: {
           score: "0",
-          tags: [...anaRes[3].split(`skills:`)[1].trim().replace(/\[|\]/g,'').split(',')]
+          tags: [...anaRes[3].split(`\"skills\":`)[1].split(`\"explanation\":`)[0].trim().replace(/\[|\]/g,'').split(',')]
             .filter((val) => val.trim().length > 5)
             .map((val) => {
               const t = val.trim().split(":")
@@ -180,11 +187,12 @@ export default function Home() {
                 score: parseInt(t[1])
               }
             })
-            .filter((val) => (val.score && val.score > 0))
+            .filter((val) => (val.score && val.score > 0)),
+            explanation: anaRes[3].split(`\"skills\":`)[1].split(`\"explanation\":`)[1].trim()
         },
         Creativity: {
           score: "0",
-          tags: [...anaRes[2].split(`skills:`)[1].trim().replace(/\[|\]/g,'').split(',')]
+          tags: [...anaRes[2].split(`\"skills\":`)[1].split(`\"explanation\":`)[0].trim().replace(/\[|\]/g,'').split(',')]
             .filter((val) => val.trim().length > 5)
             .map((val) => {
               const t = val.trim().split(":")
@@ -194,11 +202,12 @@ export default function Home() {
                 score: parseInt(t[1])
               }
             })
-            .filter((val) => (val.score && val.score > 0))
+            .filter((val) => (val.score && val.score > 0)),
+            explanation: anaRes[2].split(`\"skills\":`)[1].split(`\"explanation\":`)[1].trim()
         },
         CriticalThinking: {
           score: "0",
-          tags: [...anaRes[0].split(`skills:`)[1].trim().replace(/\[|\]/g,'').split(',')]
+          tags: [...anaRes[0].split(`\"skills\":`)[1].split(`\"explanation\":`)[0].trim().replace(/\[|\]/g,'').split(',')]
                 .filter((val) => val.trim().length > 5)
                 .map((val) => {
                   const t = val.trim().split(":")
@@ -208,11 +217,12 @@ export default function Home() {
                     score: parseInt(t[1])
                   }
                 })
-                .filter((val) => (val.score && val.score > 0))
+                .filter((val) => (val.score && val.score > 0)),
+                explanation: anaRes[0].split(`\"skills\":`)[1].split(`\"explanation\":`)[1].trim()
         },
         Character: {
           score: "0",
-          tags: [...anaRes[5].split(`skills:`)[1].trim().replace(/\[|\]/g,'').split(',')]
+          tags: [...anaRes[5].split(`\"skills\":`)[1].split(`\"explanation\":`)[0].trim().replace(/\[|\]/g,'').split(',')]
               .filter((val) => val.trim().length > 5)
               .map((val) => {
                 const t = val.trim().split(":")
@@ -222,7 +232,8 @@ export default function Home() {
                   score: parseInt(t[1])
                 }
               })
-              .filter((val) => (val.score && val.score > 0))
+              .filter((val) => (val.score && val.score > 0)),
+              explanation: anaRes[5].split(`\"skills\":`)[1].split(`\"explanation\":`)[1].trim()
         }
       }
 
@@ -253,6 +264,7 @@ export default function Home() {
       
 
       console.log(obj);
+      setFilterSkills(obj)
       setCurrSkills(obj);
 
     } catch (error) {
@@ -260,6 +272,54 @@ export default function Home() {
       console.log(error);
       setLoading(false)
       setCurrSkills(null)
+      setFilterSkills(null)
+    }
+  }
+
+  const filterTags = () => {
+
+    // setLoading(true)
+
+    const newObj: Analysis = {
+      Character: {
+        ...currSkills!.Character,
+        tags: currSkills!.Character.tags.filter((val:Tag) => val.score >= 90)
+      },
+      Cognitive: {
+        ...currSkills!.Cognitive,
+        tags: currSkills!.Cognitive.tags.filter((val:Tag) => val.score >= 90)
+      },
+      Collaboration: {
+        ...currSkills!.Collaboration,
+        tags: currSkills!.Collaboration.tags.filter((val:Tag) => val.score >= 90)
+      },
+      Communication: {
+        ...currSkills!.Communication,
+        tags: currSkills!.Communication.tags.filter((val:Tag) => val.score >= 90)
+      },
+      Creativity: {
+        ...currSkills!.Creativity,
+        tags: currSkills!.Creativity.tags.filter((val:Tag) => val.score >= 90)
+      },
+      CriticalThinking: {
+        ...currSkills!.CriticalThinking,
+        tags: currSkills!.CriticalThinking.tags.filter((val:Tag) => val.score >= 90)
+      }
+    }
+
+    setFilterSkills(newObj)
+  }
+
+  const toggle = () => {
+    console.log("toggled");
+    setFilterSelect((prev) => !prev)
+
+    if(!filterSelect){
+      filterTags()
+    }
+
+    if(filterSelect){
+      setFilterSkills(currSkills)
     }
   }
 
@@ -274,18 +334,31 @@ export default function Home() {
         <h2 
           className = "text-center text-xl font-bold mb-7"
         >
-          (without skill description)
+          (Ver 2.0)
         </h2>
         <textarea ref = {textRef} className = "rounded-md"/>
         <button
-          className = "mt-3 rounded-md bg-black px-5 py-1.5 text-xl font-bold tracking-wide text-white hover:bg-slate-800"
+          className = "mt-3 mb-6 rounded-md bg-black px-5 py-1.5 text-xl font-bold tracking-wide text-white hover:bg-slate-800"
           onClick = {checkHandler}
         >
           {loading? "Analysing...":"Analyse"}
         </button>
       </div>
-      {currSkills != null && 
+
+      {filterSkills != null && 
         (<div className="w-full p-4 flex gap-4 mt-4 flex-col">
+          {/* Switch */}
+          <div className ="flex items-center justify-start">
+            <label className ="relative inline-flex items-center cursor-pointer gap-3">
+              <input type="checkbox" className="sr-only peer"  onChange={toggle}/>
+              <span className ="border-2 border-solid border-black w-14 h-7 bg-white rounded-full peer-checked:bg-black peer-focus:outline-none peer-focus:ring peer-focus:ring-black dark:peer-focus:ring-white peer-focus:ring-opacity-50 after:absolute after:left-1 after:top-1 after:bg-black after:border-2 after:border-white after:h-5 after:w-5 after:rounded-full after:transition-transform peer-checked:after:translate-x-[27px] peer-checked:after:bg-white"></span>
+              <p
+                className = "text-xl font-semibold select-none"
+              >
+                {`Filter skills (score > 90)`}
+              </p>
+            </label>
+          </div>
           <div
             className = "w-full bg-blue-300 text-blue-800 font-bold px-3 py-1 text-xl rounded-md"
           >
@@ -294,16 +367,14 @@ export default function Home() {
             </p>
             <div className = "mt-3 flex flex-wrap gap-3 items-center">
               <p className = "font-bold">Tags:&nbsp;&nbsp;</p>
-              {currSkills.Communication.tags.map((val,i) => (
+              {filterSkills.Communication.tags.map((val,i) => (
                 <SkillTag skill={val} key = {i}/>
               ))}
             </div>
-            {/* <p className = "mt-3">
-              <strong>Tags:&nbsp;&nbsp;</strong>
-              {currSkills.Communication.tags.map((val,i) => (
-                <span key = {i}>{`${val}, `}</span>
-              ))}
-            </p> */}
+            <div>
+              <p className = "font-bold mt-3">Explanation:&nbsp;&nbsp;</p>
+              <p className = "font-medium">{`${filterSkills.Communication.explanation}`}</p>
+            </div>
           </div>
           <div
             className = "w-full bg-green-300 text-green-800 font-bold px-3 py-1 text-xl rounded-md"
@@ -311,20 +382,17 @@ export default function Home() {
             <p>
               {`Creativity:`}
             </p>
-            {/* <p>
-              {`Creativity: ${currSkills?.Creativity.score}`}
-            </p> */}
-            {/* <p className = "mt-3">
-              <strong>Tags:&nbsp;&nbsp;</strong>
-              {currSkills.Creativity.tags.map((val,i) => (
-                <span key = {i}>{`${val}, `}</span>
-              ))}
-            </p> */}
+            
             <div className = "mt-3 flex flex-wrap gap-3 items-center">
               <p className = "font-bold">Tags:&nbsp;&nbsp;</p>
-              {currSkills.Creativity.tags.map((val,i) => (
+              {filterSkills.Creativity.tags.map((val,i) => (
                 <SkillTag skill={val} key = {i}/>
               ))}
+            </div>
+
+            <div>
+              <p className = "font-bold mt-3">Explanation:&nbsp;&nbsp;</p>
+              <p className = "font-medium">{`${filterSkills.Creativity.explanation}`}</p>
             </div>
           </div>
           <div
@@ -333,20 +401,17 @@ export default function Home() {
             <p>
               {`Critical Thinking:`}
             </p>
-            {/* <p>
-              {`Critical Thinking: ${currSkills?.CriticalThinking.score}`}
-            </p> */}
-            {/* <p className = "mt-3">
-              <strong>Tags:&nbsp;&nbsp;</strong>
-              {currSkills.CriticalThinking.tags.map((val,i) => (
-                <span key = {i}>{`${val}, `}</span>
-              ))}
-            </p> */}
+            
             <div className = "mt-3 flex flex-wrap gap-3 items-center">
               <p className = "font-bold">Tags:&nbsp;&nbsp;</p>
-              {currSkills.CriticalThinking.tags.map((val,i) => (
+              {filterSkills.CriticalThinking.tags.map((val,i) => (
                 <SkillTag skill={val} key = {i}/>
               ))}
+            </div>
+
+            <div>
+              <p className = "font-bold mt-3">Explanation:&nbsp;&nbsp;</p>
+              <p className = "font-medium">{`${filterSkills.CriticalThinking.explanation}`}</p>
             </div>
           </div>
           <div
@@ -355,20 +420,17 @@ export default function Home() {
             <p>
               {`Cognitive:`}
             </p>
-            {/* <p>
-              {`Cognitive: ${currSkills?.Cognitive.score}`}
-            </p> */}
-            {/* <p className = "mt-3">
-              <strong>Tags:&nbsp;&nbsp;</strong>
-              {currSkills.Cognitive.tags.map((val,i) => (
-                <span key = {i}>{`${val}, `}</span>
-              ))}
-            </p> */}
+            
             <div className = "mt-3 flex flex-wrap gap-3 items-center">
               <p className = "font-bold">Tags:&nbsp;&nbsp;</p>
-              {currSkills.Cognitive.tags.map((val,i) => (
+              {filterSkills.Cognitive.tags.map((val,i) => (
                 <SkillTag skill={val} key = {i}/>
               ))}
+            </div>
+
+            <div>
+              <p className = "font-bold mt-3">Explanation:&nbsp;&nbsp;</p>
+              <p className = "font-medium">{`${filterSkills.Cognitive.explanation}`}</p>
             </div>
           </div>
           <div
@@ -377,20 +439,17 @@ export default function Home() {
             <p>
               {`Collaboration:`}
             </p>
-            {/* <p>
-              {`Collaboration: ${currSkills?.Collaboration.score}`}
-            </p> */}
-            {/* <p className = "mt-3">
-              <strong>Tags:&nbsp;&nbsp;</strong>
-              {currSkills.Collaboration.tags.map((val,i) => (
-                <span key = {i}>{`${val}, `}</span>
-              ))}
-            </p> */}
+            
             <div className = "mt-3 flex flex-wrap gap-3 items-center">
               <p className = "font-bold">Tags:&nbsp;&nbsp;</p>
-              {currSkills.Collaboration.tags.map((val,i) => (
+              {filterSkills.Collaboration.tags.map((val,i) => (
                 <SkillTag skill={val} key = {i}/>
               ))}
+            </div>
+
+            <div>
+              <p className = "font-bold mt-3">Explanation:&nbsp;&nbsp;</p>
+              <p className = "font-medium">{`${filterSkills.Collaboration.explanation}`}</p>
             </div>
           </div>
           <div
@@ -399,20 +458,17 @@ export default function Home() {
             <p>
               {`Character:`}
             </p>
-            {/* <p>
-              {`Character: ${currSkills?.Character.score}`}
-            </p> */}
-            {/* <p className = "mt-3">
-              <strong>Tags:&nbsp;&nbsp;</strong>
-              {currSkills.Character.tags.map((val,i) => (
-                <span key = {i}>{`${val}, `}</span>
-              ))}
-            </p> */}
+            
             <div className = "mt-3 flex flex-wrap gap-3 items-center">
               <p className = "font-bold">Tags:&nbsp;&nbsp;</p>
-              {currSkills.Character.tags.map((val,i) => (
+              {filterSkills.Character.tags.map((val,i) => (
                 <SkillTag skill={val} key = {i}/>
               ))}
+            </div>
+
+            <div>
+              <p className = "font-bold mt-3">Explanation:&nbsp;&nbsp;</p>
+              <p className = "font-medium">{`${filterSkills.Character.explanation}`}</p>
             </div>
           </div>
         </div>)

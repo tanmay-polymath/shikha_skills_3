@@ -15,26 +15,32 @@ export interface Tag {
 export interface Analysis {
     CriticalThinking: {
         score: string,
-        tags: Tag[]
+        tags: Tag[],
+        explanation: string
     }
     Communication: {
         score: string,
-        tags: Tag[]
+        tags: Tag[],
+        explanation: string
     }
     Creativity: {
         score: string,
-        tags: Tag[]
+        tags: Tag[],
+        explanation: string
     }
     Cognitive: {
         score: string,
-        tags: Tag[]
+        tags: Tag[],
+        explanation: string
     }
     Collaboration: {
         score: string,
-        tags: Tag[]
+        tags: Tag[],
+        explanation: string
     }
     Character: {
         score: string,
-        tags: Tag[]
+        tags: Tag[],
+        explanation: string
     }
 }

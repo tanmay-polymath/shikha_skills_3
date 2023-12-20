@@ -16,31 +16,31 @@ export interface Analysis {
     CriticalThinking: {
         score: string,
         tags: Tag[],
-        explanation: string
+        // explanation: string
     }
     Communication: {
         score: string,
         tags: Tag[],
-        explanation: string
+        // explanation: string
     }
     Creativity: {
         score: string,
         tags: Tag[],
-        explanation: string
+        // explanation: string
     }
     Cognitive: {
         score: string,
         tags: Tag[],
-        explanation: string
+        // explanation: string
     }
     Collaboration: {
         score: string,
         tags: Tag[],
-        explanation: string
+        // explanation: string
     }
     Character: {
         score: string,
         tags: Tag[],
-        explanation: string
+        // explanation: string
     }
 }

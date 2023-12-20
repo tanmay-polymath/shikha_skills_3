@@ -9,6 +9,8 @@ export async function POST(request: NextRequest) {
     console.log("openai explain api hit")
     const body = await request.json()
 
+    console.log(body);
+
     const mssg: string = body.message
     const reqSkill: string = body.skill
 
@@ -18,7 +20,7 @@ export async function POST(request: NextRequest) {
 
     const res = await openai.chat.completions.create({
       model: "gpt-3.5-turbo",
-    //   temperature: 0.3,
+      temperature: 0.3,
       messages: [
         {
           role: "system",
@@ -26,7 +28,7 @@ export async function POST(request: NextRequest) {
         },
         {
           role: "user",
-          content: `Forget about any previous data. You are provided an assignment description enclosed in triple quotes '''${mssg}'''. It is said that the skill of \"${reqSkill}\" is present in the assignment. You have to give a short explanation explaining the presence of \"${reqSkill}\" skill in the assignment. Your explanation should contain evidances from the assignment description supporting the claim.
+          content: `Forget about any previous data. You are provided an assignment description enclosed in triple quotes '''${mssg}'''. It is said that the skill of \"${reqSkill}\" is present in the assignment. You have to give a short and comprehenive explanation explaining the presence of \"${reqSkill}\" skill in the assignment. Your explanation should be short, comprehensive and should take references from the assignment description to support the claims. Make sure to keep your explanation short and crisp.
           `,
         },
       ],

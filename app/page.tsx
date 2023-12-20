@@ -17,6 +17,163 @@ export default function Home() {
   const [filterSkills,setFilterSkills] = useState<Analysis | null>(null)
   const [filterSelect,setFilterSelect] = useState<boolean>(false)
 
+  console.log(currSkills);
+
+  const fetchExplanation = async (obj:Analysis) => {
+    try {
+
+      const desc = textRef.current!.value.trim()
+
+      setLoading(true)
+
+      const criticalThinkingArr = obj.CriticalThinking.tags
+      const communicationArr = obj.Communication.tags
+      const creativityArr = obj.Creativity.tags
+      const cognitiveArr = obj.Cognitive.tags
+      const collaborationArr = obj.Collaboration.tags
+      const characterArr = obj.Character.tags
+
+      // crictical thinking
+      const ctRes = await Promise.all(criticalThinkingArr.map((val:Tag) => {
+        return fetch("/api/explanation",{
+          method: "post",
+          body: JSON.stringify({
+            message: desc,
+            skill: val.name
+          })
+        })
+      }))
+
+      let len = criticalThinkingArr.length
+
+      for(let i = 0 ; i < len ; i++){
+        const tData = await ctRes[i].json();
+
+        obj.CriticalThinking.tags[i].explanation = tData.message
+      }
+
+      setCurrSkills(obj)
+      setFilterSkills(obj)
+
+      // communication
+      const commRes = await Promise.all(communicationArr.map((val:Tag) => {
+        return fetch("/api/explanation",{
+          method: "post",
+          body: JSON.stringify({
+            message: desc,
+            skill: val.name
+          })
+        })
+      }))
+
+      len = communicationArr.length
+
+      for(let i = 0 ; i < len ; i++){
+        const tData = await commRes[i].json();
+
+        obj.Communication.tags[i].explanation = tData.message
+      }
+
+      setCurrSkills(obj)
+      setFilterSkills(obj)
+
+      // creativity
+      const crtRes = await Promise.all(creativityArr.map((val:Tag) => {
+        return fetch("/api/explanation",{
+          method: "post",
+          body: JSON.stringify({
+            message: desc,
+            skill: val.name
+          })
+        })
+      }))
+
+      len = creativityArr.length
+
+      for(let i = 0 ; i < len ; i++){
+        const tData = await crtRes[i].json();
+
+        obj.Creativity.tags[i].explanation = tData.message
+      }
+
+      setCurrSkills(obj)
+      setFilterSkills(obj)
+
+      // cognitive
+      const cogRes = await Promise.all(cognitiveArr.map((val:Tag) => {
+        return fetch("/api/explanation",{
+          method: "post",
+          body: JSON.stringify({
+            message: desc,
+            skill: val.name
+          })
+        })
+      }))
+
+      len = cognitiveArr.length
+
+      for(let i = 0 ; i < len ; i++){
+        const tData = await cogRes[i].json();
+
+        obj.Cognitive.tags[i].explanation = tData.message
+      }
+
+      setCurrSkills(obj)
+      setFilterSkills(obj)
+
+      // collaboration
+      const colabRes = await Promise.all(collaborationArr.map((val:Tag) => {
+        return fetch("/api/explanation",{
+          method: "post",
+          body: JSON.stringify({
+            message: desc,
+            skill: val.name
+          })
+        })
+      }))
+
+      len = collaborationArr.length
+
+      for(let i = 0 ; i < len ; i++){
+        const tData = await colabRes[i].json();
+
+        obj.Collaboration.tags[i].explanation = tData.message
+      }
+
+      setCurrSkills(obj)
+      setFilterSkills(obj)
+
+      // character
+      const chrRes = await Promise.all(characterArr.map((val:Tag) => {
+        return fetch("/api/explanation",{
+          method: "post",
+          body: JSON.stringify({
+            message: desc,
+            skill: val.name
+          })
+        })
+      }))
+
+      len = characterArr.length
+
+      for(let i = 0 ; i < len ; i++){
+        const tData = await chrRes[i].json();
+
+        obj.Character.tags[i].explanation = tData.message
+      }
+
+      setCurrSkills(obj)
+      setFilterSkills(obj)
+
+      setLoading(false)
+      
+    } catch (error) {
+      setLoading(false)
+      console.log("Error !!");
+      console.log(error);
+    }
+  }
+
   const checkHandler = async () => {
     try {
       
@@ -28,55 +185,6 @@ export default function Home() {
       setLoading(true)
 
       const apiRes = await Promise.all([
-        //0
-        // fetch("/api/analyse",{
-        //   method: 'post',
-        //   body: JSON.stringify({
-        //     message: data,
-        //     skill: "CriticalThinking"
-        //   })
-        // }),
-        // //1
-        // fetch("/api/analyse",{
-        //   method: 'post',
-        //   body: JSON.stringify({
-        //     message: data,
-        //     skill: "Cognitive"
-        //   })
-        // }),
-        // //2
-        // fetch("/api/analyse",{
-        //   method: 'post',
-        //   body: JSON.stringify({
-        //     message: data,
-        //     skill: "Creativity"
-        //   })
-        // }),
-        // //3
-        // fetch("/api/analyse",{
-        //   method: 'post',
-        //   body: JSON.stringify({
-        //     message: data,
-        //     skill: "Communication"
-        //   })
-        // }),
-        // //4
-        // fetch("/api/analyse",{
-        //   method: 'post',
-        //   body: JSON.stringify({
-        //     message: data,
-        //     skill: "Collaboration"
-        //   })
-        // }),
-        // //5
-        // fetch("/api/analyse",{
-        //   method: 'post',
-        //   body: JSON.stringify({
-        //     message: data,
-        //     skill: "Character"
-        //   })
-        // }),
-        //6
         fetch("/api/getSubskills",{
           method: 'post',
           body: JSON.stringify({
@@ -136,6 +244,7 @@ export default function Home() {
 
         if(!temp.success){
           setCurrSkills(null);
+          setFilterSkills(null)
           return;
         }
 
@@ -147,93 +256,93 @@ export default function Home() {
       const obj: Analysis = {
         Cognitive: {
           score: "0",
-          tags: [...anaRes[1].split(`\"skills\":`)[1].split(`\"explanation\":`)[0].trim().replace(/\[|\]/g,'').split(',')]
+          tags: [...anaRes[1].split(`\"skills\":`)[1].trim().replace(/\[|\]/g,'').split(',')]
             .filter((val) => val.trim().length > 5)
             .map((val) => {
               const t = val.trim().split(":")
 
               return {
                 name: t[0],
-                score: parseInt(t[1])
+                score: parseInt(t[1]),
+                explanation: ""
               }
             })
             .filter((val) => (val.score && val.score > 0)),
-            explanation: anaRes[1].split(`\"skills\":`)[1].split(`\"explanation\":`)[1].trim()
         },
         Collaboration: {
           score: "0",
-          tags: [...anaRes[4].split(`\"skills\":`)[1].split(`\"explanation\":`)[0].trim().replace(/\[|\]/g,'').split(',')]
+          tags: [...anaRes[4].split(`\"skills\":`)[1].trim().replace(/\[|\]/g,'').split(',')]
             .filter((val) => val.trim().length > 5)
             .map((val) => {
               const t = val.trim().split(":")
 
               return {
                 name: t[0],
-                score: parseInt(t[1])
+                score: parseInt(t[1]),
+                explanation: ""
               }
             })
             .filter((val) => (val.score && val.score > 0)),
-            explanation: anaRes[4].split(`\"skills\":`)[1].split(`\"explanation\":`)[1].trim()
         },
         Communication: {
           score: "0",
-          tags: [...anaRes[3].split(`\"skills\":`)[1].split(`\"explanation\":`)[0].trim().replace(/\[|\]/g,'').split(',')]
+          tags: [...anaRes[3].split(`\"skills\":`)[1].trim().replace(/\[|\]/g,'').split(',')]
             .filter((val) => val.trim().length > 5)
             .map((val) => {
               const t = val.trim().split(":")
 
               return {
                 name: t[0],
-                score: parseInt(t[1])
+                score: parseInt(t[1]),
+                explanation: ""
               }
             })
             .filter((val) => (val.score && val.score > 0)),
-            explanation: anaRes[3].split(`\"skills\":`)[1].split(`\"explanation\":`)[1].trim()
         },
         Creativity: {
           score: "0",
-          tags: [...anaRes[2].split(`\"skills\":`)[1].split(`\"explanation\":`)[0].trim().replace(/\[|\]/g,'').split(',')]
+          tags: [...anaRes[2].split(`\"skills\":`)[1].trim().replace(/\[|\]/g,'').split(',')]
             .filter((val) => val.trim().length > 5)
             .map((val) => {
               const t = val.trim().split(":")
 
               return {
                 name: t[0],
-                score: parseInt(t[1])
+                score: parseInt(t[1]),
+                explanation: ""
               }
             })
             .filter((val) => (val.score && val.score > 0)),
-            explanation: anaRes[2].split(`\"skills\":`)[1].split(`\"explanation\":`)[1].trim()
         },
         CriticalThinking: {
           score: "0",
-          tags: [...anaRes[0].split(`\"skills\":`)[1].split(`\"explanation\":`)[0].trim().replace(/\[|\]/g,'').split(',')]
+          tags: [...anaRes[0].split(`\"skills\":`)[1].trim().replace(/\[|\]/g,'').split(',')]
                 .filter((val) => val.trim().length > 5)
                 .map((val) => {
                   const t = val.trim().split(":")
 
                   return {
                     name: t[0],
-                    score: parseInt(t[1])
+                    score: parseInt(t[1]),
+                    explanation: ""
                   }
                 })
                 .filter((val) => (val.score && val.score > 0)),
-                explanation: anaRes[0].split(`\"skills\":`)[1].split(`\"explanation\":`)[1].trim()
         },
         Character: {
           score: "0",
-          tags: [...anaRes[5].split(`\"skills\":`)[1].split(`\"explanation\":`)[0].trim().replace(/\[|\]/g,'').split(',')]
+          tags: [...anaRes[5].split(`\"skills\":`)[1].trim().replace(/\[|\]/g,'').split(',')]
               .filter((val) => val.trim().length > 5)
               .map((val) => {
                 const t = val.trim().split(":")
 
                 return {
                   name: t[0],
-                  score: parseInt(t[1])
+                  score: parseInt(t[1]),
+                  explanation: ""
                 }
               })
               .filter((val) => (val.score && val.score > 0)),
-              explanation: anaRes[5].split(`\"skills\":`)[1].split(`\"explanation\":`)[1].trim()
         }
       }
 
@@ -263,9 +372,12 @@ export default function Home() {
       })
       
 
+      console.log("Tags");
       console.log(obj);
       setFilterSkills(obj)
       setCurrSkills(obj);
+
+      fetchExplanation(obj)
 
     } catch (error) {
       console.log("Error !!");
@@ -371,9 +483,17 @@ export default function Home() {
                 <SkillTag skill={val} key = {i}/>
               ))}
             </div>
+
             <div>
               <p className = "font-bold mt-3">Explanation:&nbsp;&nbsp;</p>
-              <p className = "font-medium">{`${filterSkills.Communication.explanation}`}</p>
+              {filterSkills.Communication.tags.map((tval:Tag) => {
+                return (
+                  <p className = "font-medium border-2 border-solid border-black rounded-md p-2 mt-2">
+                    <span className = "font-semibold">{`${tval.name}`}:&nbsp;&nbsp;</span>
+                    {tval.explanation == ""? "loading...":tval.explanation}
+                  </p>
+                )
+              })}
             </div>
           </div>
           <div
@@ -392,7 +512,14 @@ export default function Home() {
 
             <div>
               <p className = "font-bold mt-3">Explanation:&nbsp;&nbsp;</p>
-              <p className = "font-medium">{`${filterSkills.Creativity.explanation}`}</p>
+              {filterSkills.Creativity.tags.map((tval:Tag) => {
+                return (
+                  <p className = "font-medium border-2 border-solid border-black rounded-md p-2 mt-2">
+                    <span className = "font-semibold">{`${tval.name}`}:&nbsp;&nbsp;</span>
+                    {tval.explanation == ""? "loading...":tval.explanation}
+                  </p>
+                )
+              })}
             </div>
           </div>
           <div
@@ -411,7 +538,14 @@ export default function Home() {
 
             <div>
               <p className = "font-bold mt-3">Explanation:&nbsp;&nbsp;</p>
-              <p className = "font-medium">{`${filterSkills.CriticalThinking.explanation}`}</p>
+              {filterSkills.CriticalThinking.tags.map((tval:Tag) => {
+                return (
+                  <p className = "font-medium border-2 border-solid border-black rounded-md p-2 mt-2">
+                    <span className = "font-semibold">{`${tval.name}`}:&nbsp;&nbsp;</span>
+                    {tval.explanation == ""? "loading...":tval.explanation}
+                  </p>
+                )
+              })}
             </div>
           </div>
           <div
@@ -430,7 +564,14 @@ export default function Home() {
 
             <div>
               <p className = "font-bold mt-3">Explanation:&nbsp;&nbsp;</p>
-              <p className = "font-medium">{`${filterSkills.Cognitive.explanation}`}</p>
+              {filterSkills.Cognitive.tags.map((tval:Tag) => {
+                return (
+                  <p className = "font-medium border-2 border-solid border-black rounded-md p-2 mt-2">
+                    <span className = "font-semibold">{`${tval.name}`}:&nbsp;&nbsp;</span>
+                    {tval.explanation == ""? "loading...":tval.explanation}
+                  </p>
+                )
+              })}
             </div>
           </div>
           <div
@@ -449,7 +590,14 @@ export default function Home() {
 
             <div>
               <p className = "font-bold mt-3">Explanation:&nbsp;&nbsp;</p>
-              <p className = "font-medium">{`${filterSkills.Collaboration.explanation}`}</p>
+              {filterSkills.Collaboration.tags.map((tval:Tag) => {
+                return (
+                  <p className = "font-medium border-2 border-solid border-black rounded-md p-2 mt-2">
+                    <span className = "font-semibold">{`${tval.name}`}:&nbsp;&nbsp;</span>
+                    {tval.explanation == ""? "loading...":tval.explanation}
+                  </p>
+                )
+              })}
             </div>
           </div>
           <div
@@ -468,7 +616,14 @@ export default function Home() {
 
             <div>
               <p className = "font-bold mt-3">Explanation:&nbsp;&nbsp;</p>
-              <p className = "font-medium">{`${filterSkills.Character.explanation}`}</p>
+              {filterSkills.Character.tags.map((tval:Tag) => {
+                return (
+                  <p className = "font-medium border-2 border-solid border-black rounded-md p-2 mt-2">
+                    <span className = "font-semibold">{`${tval.name}`}:&nbsp;&nbsp;</span>
+                    {tval.explanation == ""? "loading...":tval.explanation}
+                  </p>
+                )
+              })}
             </div>
           </div>
         </div>)

@@ -3,6 +3,7 @@ import OpenAI from "openai"
 import { CriticalThinking, Communication, Creativity, Cognitive, Collaboration, Character } from "@/app/utils/data"
 
 // export const dynamic = "force-dynamic"
+export const runtime = "edge"
 
 export async function POST(request: NextRequest) {
   try {

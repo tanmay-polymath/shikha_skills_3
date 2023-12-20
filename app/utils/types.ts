@@ -10,6 +10,7 @@ export interface Skills {
 export interface Tag {
     name: string
     score: number
+    explanation: string
 }
 
 export interface Analysis {

@@ -471,7 +471,7 @@ export default function Home() {
               </p>
             </label>
           </div>
-          <div
+          {filterSkills.Communication.tags.length > 0 && <div
             className = "w-full bg-blue-300 text-blue-800 font-bold px-3 py-1 text-xl rounded-md"
           >
             <p>
@@ -488,15 +488,15 @@ export default function Home() {
               <p className = "font-bold mt-3">Explanation:&nbsp;&nbsp;</p>
               {filterSkills.Communication.tags.map((tval:Tag) => {
                 return (
-                  <p className = "font-medium border-2 border-solid border-black rounded-md p-2 mt-2">
+                  <p className = "font-medium border-2 border-solid border-blue-800 rounded-md p-2 mt-2">
                     <span className = "font-semibold">{`${tval.name}`}:&nbsp;&nbsp;</span>
                     {tval.explanation == ""? "loading...":tval.explanation}
                   </p>
                 )
               })}
             </div>
-          </div>
-          <div
+          </div>}
+          {filterSkills.Creativity.tags.length > 0 && <div
             className = "w-full bg-green-300 text-green-800 font-bold px-3 py-1 text-xl rounded-md"
           >
             <p>
@@ -514,15 +514,15 @@ export default function Home() {
               <p className = "font-bold mt-3">Explanation:&nbsp;&nbsp;</p>
               {filterSkills.Creativity.tags.map((tval:Tag) => {
                 return (
-                  <p className = "font-medium border-2 border-solid border-black rounded-md p-2 mt-2">
+                  <p className = "font-medium border-2 border-solid border-green-800 rounded-md p-2 mt-2">
                     <span className = "font-semibold">{`${tval.name}`}:&nbsp;&nbsp;</span>
                     {tval.explanation == ""? "loading...":tval.explanation}
                   </p>
                 )
               })}
             </div>
-          </div>
-          <div
+          </div>}
+          {filterSkills.CriticalThinking.tags.length > 0 && <div
             className = "w-full bg-red-300 text-red-800 font-bold px-3 py-1 text-xl rounded-md"
           >
             <p>
@@ -540,15 +540,15 @@ export default function Home() {
               <p className = "font-bold mt-3">Explanation:&nbsp;&nbsp;</p>
               {filterSkills.CriticalThinking.tags.map((tval:Tag) => {
                 return (
-                  <p className = "font-medium border-2 border-solid border-black rounded-md p-2 mt-2">
+                  <p className = "font-medium border-2 border-solid border-red-800 rounded-md p-2 mt-2">
                     <span className = "font-semibold">{`${tval.name}`}:&nbsp;&nbsp;</span>
                     {tval.explanation == ""? "loading...":tval.explanation}
                   </p>
                 )
               })}
             </div>
-          </div>
-          <div
+          </div>}
+          {filterSkills.Cognitive.tags.length > 0 && <div
             className = "w-full bg-zinc-300 text-zinc-800 font-bold px-3 py-1 text-xl rounded-md"
           >
             <p>
@@ -566,15 +566,15 @@ export default function Home() {
               <p className = "font-bold mt-3">Explanation:&nbsp;&nbsp;</p>
               {filterSkills.Cognitive.tags.map((tval:Tag) => {
                 return (
-                  <p className = "font-medium border-2 border-solid border-black rounded-md p-2 mt-2">
+                  <p className = "font-medium border-2 border-solid border-zinc-800 rounded-md p-2 mt-2">
                     <span className = "font-semibold">{`${tval.name}`}:&nbsp;&nbsp;</span>
                     {tval.explanation == ""? "loading...":tval.explanation}
                   </p>
                 )
               })}
             </div>
-          </div>
-          <div
+          </div>}
+          {filterSkills.Collaboration.tags.length > 0 && <div
             className = "w-full bg-pink-300 text-pink-800 font-bold px-3 py-1 text-xl rounded-md"
           >
             <p>
@@ -592,15 +592,15 @@ export default function Home() {
               <p className = "font-bold mt-3">Explanation:&nbsp;&nbsp;</p>
               {filterSkills.Collaboration.tags.map((tval:Tag) => {
                 return (
-                  <p className = "font-medium border-2 border-solid border-black rounded-md p-2 mt-2">
+                  <p className = "font-medium border-2 border-solid border-pink-800 rounded-md p-2 mt-2">
                     <span className = "font-semibold">{`${tval.name}`}:&nbsp;&nbsp;</span>
                     {tval.explanation == ""? "loading...":tval.explanation}
                   </p>
                 )
               })}
             </div>
-          </div>
-          <div
+          </div>}
+          {filterSkills.Character.tags.length > 0 && <div
             className = "w-full bg-yellow-300 text-yellow-800 font-bold px-3 py-1 text-xl rounded-md"
           >
             <p>
@@ -618,14 +618,14 @@ export default function Home() {
               <p className = "font-bold mt-3">Explanation:&nbsp;&nbsp;</p>
               {filterSkills.Character.tags.map((tval:Tag) => {
                 return (
-                  <p className = "font-medium border-2 border-solid border-black rounded-md p-2 mt-2">
+                  <p className = "font-medium border-2 border-solid border-yellow-800 rounded-md p-2 mt-2">
                     <span className = "font-semibold">{`${tval.name}`}:&nbsp;&nbsp;</span>
                     {tval.explanation == ""? "loading...":tval.explanation}
                   </p>
                 )
               })}
             </div>
-          </div>
+          </div>}
         </div>)
       }
     </main>

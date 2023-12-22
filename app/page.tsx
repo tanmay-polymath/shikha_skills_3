@@ -520,7 +520,7 @@ export default function Home() {
         (<div className="w-full p-4 flex gap-4 mt-4 flex-col">
           {/* Switch */}
           <div className ="flex items-center justify-start">
-            <label className ="relative inline-flex items-center cursor-pointer gap-3">
+            <label className ={`relative inline-flex items-centergap-3 ${loading? "cursor-not-allowed pointer-events-none opacity-40":"cursor-pointer "}`}>
               <input type="checkbox" className="sr-only peer"  onChange={toggle}/>
               <span className ="border-2 border-solid border-black w-14 h-7 bg-white rounded-full peer-checked:bg-black peer-focus:outline-none peer-focus:ring peer-focus:ring-black dark:peer-focus:ring-white peer-focus:ring-opacity-50 after:absolute after:left-1 after:top-1 after:bg-black after:border-2 after:border-white after:h-5 after:w-5 after:rounded-full after:transition-transform peer-checked:after:translate-x-[27px] peer-checked:after:bg-white"></span>
               <p

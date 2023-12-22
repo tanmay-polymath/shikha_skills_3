@@ -29,7 +29,7 @@ export async function POST(request: NextRequest) {
 
     const res = await openai.chat.completions.create({
       model: "gpt-3.5-turbo",
-      temperature: 0.1,
+      temperature: 0.3,
       messages: [
         {
           role: "system",
@@ -46,7 +46,7 @@ export async function POST(request: NextRequest) {
           role: "user",
           content: `Forget about any previous data. You are provided a list of skills below enclosed in triple quotes
           '''${currSkillObj["sub skills"].map(val => `${val["skill name"]}`)}'''
-          You have to go through each skill thoroughly and understand each skill. Later you will be provided an assignment description, you have to check the presence of each skill in the assignment description and return the names of all the skills along with a \"presence_score\" for each skill, from the array of skills provided above that are present in the assignment description. The \"presence_score\" that was mentioned previously is a confidence score out of 100 given to each skill which signifies how strongly that skill is present.  The response should be a comma separated series of the skill name's along with their \"presence_score\" of the skills that are present in the assignment. The response should not contain any explanation or any other random skill name that is not present in the array of provided skills.
+          You have to go through each skill thoroughly and understand each skill. Later you will be provided an assignment description, you have to check the presence of each skill in the assignment description and a "presence score" out of 100 for each skill that is present in the assignment description to signify the confidence of existance of that skill. Return the names of all the skills along with a \"presence_score\" for each skill, from the array of skills provided above that are present in the assignment description. The \"presence_score\" that was mentioned previously is a confidence score out of 100 given to each skill which signifies how strongly that skill is present in the assignment description.  The response should be a comma separated series of the skill name's along with their \"presence_score\" of the skills that are present in the assignment. The \"presence_score\" for each skill should be strictly evaluated. You should strictly avoid overscoring skills. The response should not contain any explanation or any other random skill name that is not present in the array of provided skills.
           The response should strictly be in the following format:-
           \"skills\": skill_name_1:presence_score_1,skill_name_2:presence_score_2,skill_name_3:presence_score_3,skill_name_4:presence_score_4
           `,

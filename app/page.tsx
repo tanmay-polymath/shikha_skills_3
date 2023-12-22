@@ -17,7 +17,42 @@ export default function Home() {
   const [filterSkills,setFilterSkills] = useState<Analysis | null>(null)
   const [filterSelect,setFilterSelect] = useState<boolean>(false)
 
-  console.log(currSkills);
+  // console.log(currSkills);
+
+  const filterTags = (obj?: Analysis) => {
+
+    // setLoading(true)
+    let newObj: Analysis
+
+    newObj = {
+      Character: {
+        ...currSkills!.Character,
+        tags: currSkills!.Character.tags.filter((val:Tag) => val.score >= 90)
+      },
+      Cognitive: {
+        ...currSkills!.Cognitive,
+        tags: currSkills!.Cognitive.tags.filter((val:Tag) => val.score >= 90)
+      },
+      Collaboration: {
+        ...currSkills!.Collaboration,
+        tags: currSkills!.Collaboration.tags.filter((val:Tag) => val.score >= 90)
+      },
+      Communication: {
+        ...currSkills!.Communication,
+        tags: currSkills!.Communication.tags.filter((val:Tag) => val.score >= 90)
+      },
+      Creativity: {
+        ...currSkills!.Creativity,
+        tags: currSkills!.Creativity.tags.filter((val:Tag) => val.score >= 90)
+      },
+      CriticalThinking: {
+        ...currSkills!.CriticalThinking,
+        tags: currSkills!.CriticalThinking.tags.filter((val:Tag) => val.score >= 90)
+      }
+    }
+
+    setFilterSkills(newObj)
+  }
 
   const fetchExplanation = async (obj:Analysis) => {
     try {
@@ -52,8 +87,8 @@ export default function Home() {
         obj.CriticalThinking.tags[i].explanation = tData.message
       }
 
-      setCurrSkills(obj)
-      setFilterSkills(obj)
+      // setCurrSkills(obj)
+      // setFilterSkills(obj)
 
       // communication
       const commRes = await Promise.all(communicationArr.map((val:Tag) => {
@@ -74,8 +109,8 @@ export default function Home() {
         obj.Communication.tags[i].explanation = tData.message
       }
 
-      setCurrSkills(obj)
-      setFilterSkills(obj)
+      // setCurrSkills(obj)
+      // setFilterSkills(obj)
 
       // creativity
       const crtRes = await Promise.all(creativityArr.map((val:Tag) => {
@@ -96,8 +131,8 @@ export default function Home() {
         obj.Creativity.tags[i].explanation = tData.message
       }
 
-      setCurrSkills(obj)
-      setFilterSkills(obj)
+      // setCurrSkills(obj)
+      // setFilterSkills(obj)
 
       // cognitive
       const cogRes = await Promise.all(cognitiveArr.map((val:Tag) => {
@@ -118,8 +153,8 @@ export default function Home() {
         obj.Cognitive.tags[i].explanation = tData.message
       }
 
-      setCurrSkills(obj)
-      setFilterSkills(obj)
+      // setCurrSkills(obj)
+      // setFilterSkills(obj)
 
       // collaboration
       const colabRes = await Promise.all(collaborationArr.map((val:Tag) => {
@@ -140,8 +175,8 @@ export default function Home() {
         obj.Collaboration.tags[i].explanation = tData.message
       }
 
-      setCurrSkills(obj)
-      setFilterSkills(obj)
+      // setCurrSkills(obj)
+      // setFilterSkills(obj)
 
       // character
       const chrRes = await Promise.all(characterArr.map((val:Tag) => {
@@ -158,15 +193,44 @@ export default function Home() {
 
       for(let i = 0 ; i < len ; i++){
         const tData = await chrRes[i].json();
-
+        
         obj.Character.tags[i].explanation = tData.message
       }
 
-      setCurrSkills(obj)
-      setFilterSkills(obj)
-
       setLoading(false)
-      
+
+      setCurrSkills(obj)
+      // setFilterSkills(obj)
+
+      const newObj: Analysis = (filterSelect)? {
+        Character: {
+          ...obj!.Character,
+          tags: obj!.Character.tags.filter((val:Tag) => val.score >= 90)
+        },
+        Cognitive: {
+          ...obj!.Cognitive,
+          tags: obj!.Cognitive.tags.filter((val:Tag) => val.score >= 90)
+        },
+        Collaboration: {
+          ...obj!.Collaboration,
+          tags: obj!.Collaboration.tags.filter((val:Tag) => val.score >= 90)
+        },
+        Communication: {
+          ...obj!.Communication,
+          tags: obj!.Communication.tags.filter((val:Tag) => val.score >= 90)
+        },
+        Creativity: {
+          ...obj!.Creativity,
+          tags: obj!.Creativity.tags.filter((val:Tag) => val.score >= 90)
+        },
+        CriticalThinking: {
+          ...obj!.CriticalThinking,
+          tags: obj!.CriticalThinking.tags.filter((val:Tag) => val.score >= 90)
+        }
+      } : obj
+
+      setFilterSkills(newObj)
+
     } catch (error) {
       setLoading(false)
       console.log("Error !!");
@@ -374,8 +438,37 @@ export default function Home() {
 
       console.log("Tags");
       console.log(obj);
-      setFilterSkills(obj)
+      // setFilterSkills(obj)
       setCurrSkills(obj);
+
+      const newObj: Analysis = (filterSelect)? {
+        Character: {
+          ...obj!.Character,
+          tags: obj!.Character.tags.filter((val:Tag) => val.score >= 90)
+        },
+        Cognitive: {
+          ...obj!.Cognitive,
+          tags: obj!.Cognitive.tags.filter((val:Tag) => val.score >= 90)
+        },
+        Collaboration: {
+          ...obj!.Collaboration,
+          tags: obj!.Collaboration.tags.filter((val:Tag) => val.score >= 90)
+        },
+        Communication: {
+          ...obj!.Communication,
+          tags: obj!.Communication.tags.filter((val:Tag) => val.score >= 90)
+        },
+        Creativity: {
+          ...obj!.Creativity,
+          tags: obj!.Creativity.tags.filter((val:Tag) => val.score >= 90)
+        },
+        CriticalThinking: {
+          ...obj!.CriticalThinking,
+          tags: obj!.CriticalThinking.tags.filter((val:Tag) => val.score >= 90)
+        }
+      } : obj
+
+      setFilterSkills(newObj)
 
       fetchExplanation(obj)
 
@@ -386,40 +479,6 @@ export default function Home() {
       setCurrSkills(null)
       setFilterSkills(null)
     }
-  }
-
-  const filterTags = () => {
-
-    // setLoading(true)
-
-    const newObj: Analysis = {
-      Character: {
-        ...currSkills!.Character,
-        tags: currSkills!.Character.tags.filter((val:Tag) => val.score >= 90)
-      },
-      Cognitive: {
-        ...currSkills!.Cognitive,
-        tags: currSkills!.Cognitive.tags.filter((val:Tag) => val.score >= 90)
-      },
-      Collaboration: {
-        ...currSkills!.Collaboration,
-        tags: currSkills!.Collaboration.tags.filter((val:Tag) => val.score >= 90)
-      },
-      Communication: {
-        ...currSkills!.Communication,
-        tags: currSkills!.Communication.tags.filter((val:Tag) => val.score >= 90)
-      },
-      Creativity: {
-        ...currSkills!.Creativity,
-        tags: currSkills!.Creativity.tags.filter((val:Tag) => val.score >= 90)
-      },
-      CriticalThinking: {
-        ...currSkills!.CriticalThinking,
-        tags: currSkills!.CriticalThinking.tags.filter((val:Tag) => val.score >= 90)
-      }
-    }
-
-    setFilterSkills(newObj)
   }
 
   const toggle = () => {

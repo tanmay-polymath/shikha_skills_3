@@ -9,7 +9,7 @@ export async function POST(request: NextRequest) {
     console.log("openai explain api hit")
     const body = await request.json()
 
-    console.log(body);
+    console.log(body)
 
     const mssg: string = body.message
     const reqSkill: string = body.skill

@@ -1,12 +1,12 @@
 @tailwind base;
 @tailwind components;
-@tailwind utilities;  
+@tailwind utilities;
 
 .slider-thumb {
-    /* transition: transform 0.4s; */
+  /* transition: transform 0.4s; */
 }
 
 /* You might need to adjust this value based on the size of your toggle */
 .slider-thumb-checked {
-    transform: translateX(1.75rem); /* Adjust this value as needed */
+  transform: translateX(1.75rem); /* Adjust this value as needed */
 }

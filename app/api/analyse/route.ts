@@ -1,6 +1,13 @@
+import {
+  Character,
+  Cognitive,
+  Collaboration,
+  Communication,
+  Creativity,
+  CriticalThinking,
+} from "@/app/utils/data"
 import { NextRequest, NextResponse } from "next/server"
 import OpenAI from "openai"
-import { CriticalThinking, Communication, Creativity, Cognitive, Collaboration, Character } from "@/app/utils/data"
 
 // export const dynamic = "force-dynamic"
 
@@ -19,7 +26,18 @@ export async function POST(request: NextRequest) {
     // console.log(reqSkill);
     // console.log(`${(reqSkill == "CriticalThinking")? CriticalThinking.skill_name: reqSkill == "Communication"? Communication.skill_name: reqSkill == "Creativity"? Creativity.skill_name: reqSkill == "Cognitive"? Cognitive.skill_name: reqSkill == "Collaboration"? Collaboration.skill_name: Character.skill_name}`);
 
-    const currSkillObj = (reqSkill == "CriticalThinking")? CriticalThinking: reqSkill == "Communication"? Communication: reqSkill == "Creativity"? Creativity: reqSkill == "Cognitive"? Cognitive: reqSkill == "Collaboration"? Collaboration: Character
+    const currSkillObj =
+      reqSkill == "CriticalThinking"
+        ? CriticalThinking
+        : reqSkill == "Communication"
+          ? Communication
+          : reqSkill == "Creativity"
+            ? Creativity
+            : reqSkill == "Cognitive"
+              ? Cognitive
+              : reqSkill == "Collaboration"
+                ? Collaboration
+                : Character
 
     // console.log(`${currSkillObj["sub skills"]}`);
     // console.log("------------------------------------------------------------");
@@ -40,41 +58,41 @@ export async function POST(request: NextRequest) {
           `,
         },
         {
-            role: "user",
-            content: `
+          role: "user",
+          content: `
               skill :-
               skill name = ${currSkillObj.skill_name}
               skill explanation = ${currSkillObj.explanation}
             `,
         },
         {
-            role: "user",
-            content: `I am just describing the project`
+          role: "user",
+          content: `I am just describing the project`,
         },
         {
-            role: "assistant",
-            content: '0%'
+          role: "assistant",
+          content: "0%",
         },
         {
-            role: "user",
-            content: `I have come up with a new realtime chat application`
+          role: "user",
+          content: `I have come up with a new realtime chat application`,
         },
         {
-            role: "assistant",
-            content: `${reqSkill == "CriticalThinking"? "23%": reqSkill == "Communication"? "0%": reqSkill == "Creativity"? "50%": reqSkill == "Cognitive"? "17%": reqSkill == "Collaboration"? "0%": "0%"}`
+          role: "assistant",
+          content: `${reqSkill == "CriticalThinking" ? "23%" : reqSkill == "Communication" ? "0%" : reqSkill == "Creativity" ? "50%" : reqSkill == "Cognitive" ? "17%" : reqSkill == "Collaboration" ? "0%" : "0%"}`,
         },
         {
-            role: "user",
-            content: `Pioneered the implementation of this system, leading to 100% elimination of paper usage. Drove the entire front-end development, including 100% implementation of QR Code interface. Orchestrated a collaborative effort among a team of 3 student, hence maximizing productivity.`
+          role: "user",
+          content: `Pioneered the implementation of this system, leading to 100% elimination of paper usage. Drove the entire front-end development, including 100% implementation of QR Code interface. Orchestrated a collaborative effort among a team of 3 student, hence maximizing productivity.`,
         },
         {
-            role: "assistant",
-            content: `${reqSkill == "CriticalThinking"? "70%": reqSkill == "Communication"? "92%": reqSkill == "Creativity"? "97%": reqSkill == "Cognitive"? "87%": reqSkill == "Collaboration"? "100%": "60%"}`
+          role: "assistant",
+          content: `${reqSkill == "CriticalThinking" ? "70%" : reqSkill == "Communication" ? "92%" : reqSkill == "Creativity" ? "97%" : reqSkill == "Cognitive" ? "87%" : reqSkill == "Collaboration" ? "100%" : "60%"}`,
         },
         {
-            role: "user",
-            content: `assignment description: ${mssg}`
-        }
+          role: "user",
+          content: `assignment description: ${mssg}`,
+        },
       ],
     })
 

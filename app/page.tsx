@@ -645,7 +645,7 @@ export default function Home() {
           <div className="mt-1">
             <textarea
               // type="text"
-              className="w-full min-h-[100px] rounded-md border border-zinc-300 p-2 px-4 text-zinc-700 shadow-lg focus:border-transparent focus:outline-none focus:ring-2 focus:ring-black focus-visible:border-transparent"
+              className="min-h-[100px] w-full rounded-md border border-zinc-300 p-2 px-4 text-zinc-700 shadow-lg focus:border-transparent focus:outline-none focus:ring-2 focus:ring-black focus-visible:border-transparent"
               placeholder="Enter description"
               required
               ref={textRef}
@@ -862,14 +862,14 @@ export default function Home() {
           {!loading && (
             <Button
               onClick={handlePrint}
-              className="mx-auto w-auto px-5 text-lg mt-5"
+              className="mx-auto mt-5 w-auto px-5 text-lg"
             >
               Export
             </Button>
           )}
           <div
             ref={componentRef}
-            className=" hidden print:h-full print:w-full print:block"
+            className=" hidden print:block print:size-full"
           >
             <div className="print:mb-6">
               <Image
@@ -881,7 +881,7 @@ export default function Home() {
                 alt="Logo"
               />
             </div>
-            <h1 className="font-extrabold text-xl block mb-3 underline underline-offset-4">
+            <h1 className="mb-3 block text-xl font-extrabold underline underline-offset-4">
               Project Skills Tagger
             </h1>
             <div className="header hidden print:fixed print:bottom-0 print:right-0 print:block">
@@ -894,7 +894,7 @@ export default function Home() {
                 alt="Logo"
               />
             </div>
-            <div className="print:block hidden print:text-lg print:bg-zinc-100 print:p-2 print:rounded-md print:mb-6 print:border print:border-zinc-300 print:px-4">
+            <div className="hidden print:mb-6 print:block print:rounded-md print:border print:border-zinc-300 print:bg-zinc-100 print:p-2 print:px-4 print:text-lg">
               <div className="flex gap-3">
                 <span className="font-bold">Name:</span>
                 <span>{state.name}</span>
@@ -908,7 +908,7 @@ export default function Home() {
                 <span>{state.link}</span>
               </div>
             </div>
-            <h1 className="font-bold text-lg block mb-3 underline underline-offset-4">
+            <h1 className="mb-3 block text-lg font-bold underline underline-offset-4">
               Skills Detected
             </h1>
             {filterSkills.Communication.tags.length > 0 && (

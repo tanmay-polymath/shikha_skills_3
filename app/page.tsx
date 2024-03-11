@@ -18,6 +18,7 @@ import {
 import { Label } from "@/components/ui/label"
 import { Switch } from "@/components/ui/switch"
 import { Loader } from "lucide-react"
+import Image from "next/image"
 import { useReactToPrint } from "react-to-print"
 
 export default function Home() {
@@ -594,11 +595,21 @@ export default function Home() {
     content: () => componentRef.current,
     documentTitle: "Skills Assessment",
     onPrintError: () => alert("there is an error when printing"),
-    pageStyle: "@page { size: A4; margin: 8.5mm; }",
+    pageStyle: "@page { size: A4; margin: 8mm; }",
   })
 
   return (
     <main className="my-12 flex w-full flex-1 flex-col items-center justify-start px-4 sm:mt-12">
+      <div className="mb-7 flex items-center gap-1">
+        <Image
+          unoptimized
+          priority
+          src="/logo_new.png"
+          height={150}
+          width={150}
+          alt="Logo"
+        />
+      </div>
       <h1 className="text-4xl font-bold tracking-tight text-slate-900 sm:text-5xl">
         Skills Assessment
       </h1>
@@ -630,12 +641,12 @@ export default function Home() {
           </div>
         </div>
         <div id="link-div" className="mt-8">
-          <p className="text-lg font-semibold">Link</p>
+          <p className="text-lg font-semibold">Description</p>
           <div className="mt-1">
-            <input
-              type="text"
-              className="w-full rounded-md border border-zinc-300 p-2 px-4 text-zinc-700 shadow-lg focus:border-transparent focus:outline-none focus:ring-2 focus:ring-black focus-visible:border-transparent"
-              placeholder="Enter link"
+            <textarea
+              // type="text"
+              className="w-full min-h-[100px] rounded-md border border-zinc-300 p-2 px-4 text-zinc-700 shadow-lg focus:border-transparent focus:outline-none focus:ring-2 focus:ring-black focus-visible:border-transparent"
+              placeholder="Enter description"
               required
               ref={textRef}
               value={state.link}
@@ -851,11 +862,236 @@ export default function Home() {
           {!loading && (
             <Button
               onClick={handlePrint}
-              className="mx-auto w-full max-w-md text-lg"
+              className="mx-auto w-auto px-5 text-lg mt-5"
             >
               Export
             </Button>
           )}
+          <div
+            ref={componentRef}
+            className=" hidden print:h-full print:w-full print:block"
+          >
+            <div className="print:mb-6">
+              <Image
+                unoptimized
+                priority
+                src="/logo_new.png"
+                height={150}
+                width={150}
+                alt="Logo"
+              />
+            </div>
+            <h1 className="font-extrabold text-xl block mb-3 underline underline-offset-4">
+              Project Skills Tagger
+            </h1>
+            <div className="header hidden print:fixed print:bottom-0 print:right-0 print:block">
+              <Image
+                unoptimized
+                priority
+                src="/logo_new.png"
+                height={150}
+                width={150}
+                alt="Logo"
+              />
+            </div>
+            <div className="print:block hidden print:text-lg print:bg-zinc-100 print:p-2 print:rounded-md print:mb-6 print:border print:border-zinc-300 print:px-4">
+              <div className="flex gap-3">
+                <span className="font-bold">Name:</span>
+                <span>{state.name}</span>
+              </div>
+              <div className="flex gap-3">
+                <span className="font-bold">Grade: </span>
+                <span>{state.grade}</span>
+              </div>
+              <div className="flex gap-3">
+                <span className="font-bold">Description: </span>
+                <span>{state.link}</span>
+              </div>
+            </div>
+            <h1 className="font-bold text-lg block mb-3 underline underline-offset-4">
+              Skills Detected
+            </h1>
+            {filterSkills.Communication.tags.length > 0 && (
+              // <CarouselItem>
+              <Card className="size-full print:break-after-page">
+                <CardHeader>
+                  <CardTitle>Communication</CardTitle>
+                  <div className="flex w-full gap-4">
+                    {filterSkills.Communication.tags.map((val, i) => (
+                      <SkillTag skill={val} key={i} />
+                    ))}
+                  </div>
+                </CardHeader>
+                <CardContent>
+                  {filterSkills.Communication.tags.map((tval: Tag) => {
+                    return (
+                      <p className="mb-3 rounded-md border border-dashed border-zinc-400 px-4 py-3 font-medium">
+                        <span className="font-semibold">
+                          {`${tval.name}`}:&nbsp;&nbsp;
+                        </span>
+                        {tval.explanation == "" ? (
+                          <SkeletonCard />
+                        ) : (
+                          tval.explanation
+                        )}
+                      </p>
+                    )
+                  })}
+                </CardContent>
+              </Card>
+              // </CarouselItem>
+            )}
+            {filterSkills.Creativity.tags.length > 0 && (
+              // <CarouselItem>
+              <Card className="size-full print:break-after-page">
+                <CardHeader>
+                  <CardTitle>Creativity</CardTitle>
+                  <div className="flex w-full gap-4">
+                    {filterSkills.Creativity.tags.map((val, i) => (
+                      <SkillTag skill={val} key={i} />
+                    ))}
+                  </div>
+                </CardHeader>
+                <CardContent>
+                  {filterSkills.Creativity.tags.map((tval: Tag) => {
+                    return (
+                      <p className="mb-3 rounded-md border border-dashed border-zinc-400 px-4 py-3 font-medium">
+                        <span className="font-semibold">
+                          {`${tval.name}`}:&nbsp;&nbsp;
+                        </span>
+                        {tval.explanation == "" ? (
+                          <SkeletonCard />
+                        ) : (
+                          tval.explanation
+                        )}
+                      </p>
+                    )
+                  })}
+                </CardContent>
+              </Card>
+              // </CarouselItem>
+            )}
+            {filterSkills.CriticalThinking.tags.length > 0 && (
+              // <CarouselItem>
+              <Card className="size-full print:break-after-page">
+                <CardHeader>
+                  <CardTitle>Critical Thinking</CardTitle>
+                  <div className="flex w-full gap-4">
+                    {filterSkills.CriticalThinking.tags.map((val, i) => (
+                      <SkillTag skill={val} key={i} />
+                    ))}
+                  </div>
+                </CardHeader>
+                <CardContent>
+                  {filterSkills.CriticalThinking.tags.map((tval: Tag) => {
+                    return (
+                      <p className="mb-3 rounded-md border border-dashed border-zinc-400 px-4 py-3 font-medium">
+                        <span className="font-semibold">
+                          {`${tval.name}`}:&nbsp;&nbsp;
+                        </span>
+                        {tval.explanation == "" ? (
+                          <SkeletonCard />
+                        ) : (
+                          tval.explanation
+                        )}
+                      </p>
+                    )
+                  })}
+                </CardContent>
+              </Card>
+              // </CarouselItem>
+            )}
+            {filterSkills.Cognitive.tags.length > 0 && (
+              // <CarouselItem>
+              <Card className="size-full print:break-after-page">
+                <CardHeader>
+                  <CardTitle>Cognitive</CardTitle>
+                  <div className="flex w-full gap-4">
+                    {filterSkills.Cognitive.tags.map((val, i) => (
+                      <SkillTag skill={val} key={i} />
+                    ))}
+                  </div>
+                </CardHeader>
+                <CardContent>
+                  {filterSkills.Cognitive.tags.map((tval: Tag) => {
+                    return (
+                      <p className="mb-3 rounded-md border border-dashed border-zinc-400 px-4 py-3 font-medium">
+                        <span className="font-semibold">
+                          {`${tval.name}`}:&nbsp;&nbsp;
+                        </span>
+                        {tval.explanation == "" ? (
+                          <SkeletonCard />
+                        ) : (
+                          tval.explanation
+                        )}
+                      </p>
+                    )
+                  })}
+                </CardContent>
+              </Card>
+              // </CarouselItem>
+            )}
+            {filterSkills.Collaboration.tags.length > 0 && (
+              // <CarouselItem>
+              <Card className="size-full print:break-after-page">
+                <CardHeader>
+                  <CardTitle>Collaboration</CardTitle>
+                  <div className="flex w-full gap-4">
+                    {filterSkills.Collaboration.tags.map((val, i) => (
+                      <SkillTag skill={val} key={i} />
+                    ))}
+                  </div>
+                </CardHeader>
+                <CardContent>
+                  {filterSkills.Collaboration.tags.map((tval: Tag) => {
+                    return (
+                      <p className="mb-3 rounded-md border border-dashed border-zinc-400 px-4 py-3 font-medium">
+                        <span className="font-semibold">
+                          {`${tval.name}`}:&nbsp;&nbsp;
+                        </span>
+                        {tval.explanation == "" ? (
+                          <SkeletonCard />
+                        ) : (
+                          tval.explanation
+                        )}
+                      </p>
+                    )
+                  })}
+                </CardContent>
+              </Card>
+              // </CarouselItem>
+            )}
+            {filterSkills.Character.tags.length > 0 && (
+              // <CarouselItem>
+              <Card className="size-full print:break-after-page">
+                <CardHeader>
+                  <CardTitle>Character</CardTitle>
+                  <div className="flex w-full gap-4">
+                    {filterSkills.Character.tags.map((val, i) => (
+                      <SkillTag skill={val} key={i} />
+                    ))}
+                  </div>
+                </CardHeader>
+                <CardContent>
+                  {filterSkills.Character.tags.map((tval: Tag) => {
+                    return (
+                      <p className="mb-3 rounded-md border border-dashed border-zinc-400 px-4 py-3 font-medium">
+                        <span className="font-semibold">
+                          {`${tval.name}`}:&nbsp;&nbsp;
+                        </span>
+                        {tval.explanation == "" ? (
+                          <SkeletonCard />
+                        ) : (
+                          tval.explanation
+                        )}
+                      </p>
+                    )
+                  })}
+                </CardContent>
+              </Card>
+              // </CarouselItem>
+            )}
+          </div>
         </div>
       )}
     </main>

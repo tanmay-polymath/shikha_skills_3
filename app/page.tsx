@@ -8,15 +8,9 @@ import SkillTag from "@/components/SkillTag"
 import { SkeletonCard } from "@/components/skeleton-card"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from "@/components/ui/carousel"
 import { Label } from "@/components/ui/label"
 import { Switch } from "@/components/ui/switch"
+import UploadComponent from "@/components/upload"
 import { Loader } from "lucide-react"
 import Image from "next/image"
 import { useReactToPrint } from "react-to-print"
@@ -26,7 +20,7 @@ export default function Home() {
   const [loading, setLoading] = useState<boolean>(false)
   const [currSkills, setCurrSkills] = useState<Analysis | null>(null)
   const [filterSkills, setFilterSkills] = useState<Analysis | null>(null)
-  const [filterSelect, setFilterSelect] = useState<boolean>(false)
+  const [filterSelect, setFilterSelect] = useState<boolean>(true)
   const componentRef = useRef(null)
   // const [api, setApi] = useState<CarouselApi>()
   // const [current, setCurrent] = useState(0)
@@ -598,20 +592,34 @@ export default function Home() {
     pageStyle: "@page { size: A4; margin: 8mm; }",
   })
 
+  // const [activeTag, setActiveTag] = useState<string | null>(null)
+  // const handleTagClick = (tagName: string) => {
+  //   setActiveTag(tagName === activeTag ? null : tagName)
+  // }
+
+  const [activeTags, setActiveTags] = useState<any>({})
+
+  const handleTagClick = (key: string, tagName: string) => {
+    setActiveTags((prevState: any) => ({
+      ...prevState,
+      [key]: prevState[key] === tagName ? null : tagName,
+    }))
+  }
+
   return (
     <main className="my-12 flex w-full flex-1 flex-col items-center justify-start px-4 sm:mt-12">
-      <div className="mb-7 flex items-center gap-1">
+      <div className="flex items-center gap-1">
         <Image
           unoptimized
           priority
-          src="/logo_new.png"
+          src="/shikha-labs.png"
           height={150}
           width={150}
           alt="Logo"
         />
       </div>
       <h1 className="text-4xl font-bold tracking-tight text-slate-900 sm:text-5xl">
-        Skills Assessment
+        Student Portfolio Analyzer
       </h1>
       <div className="mt-8 flex w-full max-w-2xl flex-col">
         <div id="name-div">
@@ -654,6 +662,10 @@ export default function Home() {
             />
           </div>
         </div>
+        <div id="upload-div">
+          <UploadComponent />
+        </div>
+        {/* <div className="p-4"> */}
         <Button onClick={checkHandler} className="mt-7 text-xl font-normal">
           {loading ? <Loader className="animate-spin" /> : "Analyse"}
         </Button>
@@ -661,30 +673,40 @@ export default function Home() {
 
       {filterSkills != null && (
         <div className="mt-10 flex w-full flex-col gap-0 p-4">
-          <div className="mx-auto my-0 flex w-full max-w-6xl items-center space-x-2">
-            <Switch onCheckedChange={toggle} id="airplane-mode" />
-            <Label htmlFor="airplane-mode">
-              Filter skills (score {`>=`} 80)
-            </Label>
+          <div className="mb-5 mt-0 flex w-full items-center justify-start space-x-2 px-10">
+            <Switch
+              checked={filterSelect}
+              onCheckedChange={toggle}
+              id="filter"
+              disabled={loading}
+            />
+            <Label htmlFor="filter">Filter skills (score {`>=`} 80)</Label>
           </div>
-          <Carousel
+          {/* <Carousel
             // setApi={setApi}
             className="mx-auto mt-4 w-full max-w-6xl"
-          >
-            <CarouselContent className="mb-4">
-              {filterSkills.Communication.tags.length > 0 && (
-                <CarouselItem>
-                  <Card className="size-full">
-                    <CardHeader>
-                      <CardTitle>Communication</CardTitle>
-                      <div className="flex w-full gap-4">
-                        {filterSkills.Communication.tags.map((val, i) => (
-                          <SkillTag skill={val} key={i} />
-                        ))}
-                      </div>
-                    </CardHeader>
-                    <CardContent>
-                      {filterSkills.Communication.tags.map((tval: Tag) => {
+          > */}
+          {/* <CarouselContent className="mb-4"> */}
+          <div className=" space-y-10 px-10">
+            {filterSkills.Communication.tags.length > 0 && (
+              // <CarouselItem>
+              <Card className="size-full">
+                <CardHeader>
+                  <CardTitle>Communication</CardTitle>
+                  <div className="flex w-full flex-wrap gap-x-4 gap-y-2">
+                    {filterSkills.Communication.tags.map((val, i) => (
+                      <SkillTag
+                        skill={val}
+                        key={i}
+                        onClick={() =>
+                          handleTagClick("Communication", val.name)
+                        }
+                      />
+                    ))}
+                  </div>
+                </CardHeader>
+                <CardContent>
+                  {/* {filterSkills.Communication.tags.map((tval: Tag) => {
                         return (
                           <p className="mb-3 rounded-md border border-dashed border-zinc-400 px-4 py-3 font-medium">
                             <span className="font-semibold">
@@ -697,26 +719,50 @@ export default function Home() {
                             )}
                           </p>
                         )
-                      })}
-                    </CardContent>
-                  </Card>
-                </CarouselItem>
-              )}
-              {filterSkills.Creativity.tags.length > 0 && (
-                <CarouselItem>
-                  <Card className="size-full">
-                    <CardHeader>
-                      <CardTitle>Creativity</CardTitle>
-                      <div className="flex w-full gap-4">
-                        {filterSkills.Creativity.tags.map((val, i) => (
-                          <SkillTag skill={val} key={i} />
-                        ))}
-                      </div>
-                    </CardHeader>
-                    <CardContent>
-                      {filterSkills.Creativity.tags.map((tval: Tag) => {
+                      })} */}
+                  {filterSkills.Communication.tags.map((tval: Tag) => {
+                    if (tval.name === activeTags["Communication"]) {
+                      return (
+                        <p
+                          className="mb-3 rounded-md border border-dashed border-zinc-400 px-4 py-3 text-sm font-medium"
+                          key={tval.name}
+                        >
+                          <span className="font-semibold">
+                            {`${tval.name}`}:&nbsp;&nbsp;
+                          </span>
+                          {tval.explanation === "" ? (
+                            <SkeletonCard />
+                          ) : (
+                            tval.explanation
+                          )}
+                        </p>
+                      )
+                    }
+                    return null // Render nothing if the tag is not active
+                  })}
+                </CardContent>
+              </Card>
+              // </CarouselItem>
+            )}
+            {filterSkills.Creativity.tags.length > 0 && (
+              // <CarouselItem>
+              <Card className="size-full">
+                <CardHeader>
+                  <CardTitle>Creativity</CardTitle>
+                  <div className="flex w-full flex-wrap gap-x-4 gap-y-2">
+                    {filterSkills.Creativity.tags.map((val, i) => (
+                      <SkillTag
+                        skill={val}
+                        key={i}
+                        onClick={() => handleTagClick("Creativity", val.name)}
+                      />
+                    ))}
+                  </div>
+                </CardHeader>
+                <CardContent>
+                  {/* {filterSkills.Creativity.tags.map((tval: Tag) => {
                         return (
-                          <p className="mb-3 rounded-md border border-dashed border-zinc-400 px-4 py-3 font-medium">
+                          <p className="mb-3 rounded-md border border-dashed border-zinc-400 px-4 py-3 font-medium text-sm">
                             <span className="font-semibold">
                               {`${tval.name}`}:&nbsp;&nbsp;
                             </span>
@@ -727,26 +773,52 @@ export default function Home() {
                             )}
                           </p>
                         )
-                      })}
-                    </CardContent>
-                  </Card>
-                </CarouselItem>
-              )}
-              {filterSkills.CriticalThinking.tags.length > 0 && (
-                <CarouselItem>
-                  <Card className="size-full">
-                    <CardHeader>
-                      <CardTitle>Critical Thinking</CardTitle>
-                      <div className="flex w-full gap-4">
-                        {filterSkills.CriticalThinking.tags.map((val, i) => (
-                          <SkillTag skill={val} key={i} />
-                        ))}
-                      </div>
-                    </CardHeader>
-                    <CardContent>
-                      {filterSkills.CriticalThinking.tags.map((tval: Tag) => {
+                      })} */}
+                  {filterSkills.Creativity.tags.map((tval: Tag) => {
+                    if (tval.name === activeTags["Creativity"]) {
+                      return (
+                        <p
+                          className="mb-3 rounded-md border border-dashed border-zinc-400 px-4 py-3 text-sm font-medium"
+                          key={tval.name}
+                        >
+                          <span className="font-semibold">
+                            {`${tval.name}`}:&nbsp;&nbsp;
+                          </span>
+                          {tval.explanation === "" ? (
+                            <SkeletonCard />
+                          ) : (
+                            tval.explanation
+                          )}
+                        </p>
+                      )
+                    }
+                    return null // Render nothing if the tag is not active
+                  })}
+                </CardContent>
+              </Card>
+              // </CarouselItem>
+            )}
+            {filterSkills.CriticalThinking.tags.length > 0 && (
+              // <CarouselItem>
+              <Card className="size-full">
+                <CardHeader>
+                  <CardTitle>Critical Thinking</CardTitle>
+                  <div className="flex w-full flex-wrap gap-x-4 gap-y-2">
+                    {filterSkills.CriticalThinking.tags.map((val, i) => (
+                      <SkillTag
+                        skill={val}
+                        key={i}
+                        onClick={() =>
+                          handleTagClick("CriticalThinking", val.name)
+                        }
+                      />
+                    ))}
+                  </div>
+                </CardHeader>
+                <CardContent>
+                  {/* {filterSkills.CriticalThinking.tags.map((tval: Tag) => {
                         return (
-                          <p className="mb-3 rounded-md border border-dashed border-zinc-400 px-4 py-3 font-medium">
+                          <p className="mb-3 rounded-md border border-dashed border-zinc-400 px-4 py-3 font-medium text-sm">
                             <span className="font-semibold">
                               {`${tval.name}`}:&nbsp;&nbsp;
                             </span>
@@ -757,26 +829,51 @@ export default function Home() {
                             )}
                           </p>
                         )
-                      })}
-                    </CardContent>
-                  </Card>
-                </CarouselItem>
-              )}
-              {filterSkills.Cognitive.tags.length > 0 && (
-                <CarouselItem>
-                  <Card className="size-full">
-                    <CardHeader>
-                      <CardTitle>Cognitive</CardTitle>
-                      <div className="flex w-full gap-4">
-                        {filterSkills.Cognitive.tags.map((val, i) => (
-                          <SkillTag skill={val} key={i} />
-                        ))}
-                      </div>
-                    </CardHeader>
-                    <CardContent>
-                      {filterSkills.Cognitive.tags.map((tval: Tag) => {
+                      })} */}
+
+                  {filterSkills.CriticalThinking.tags.map((tval: Tag) => {
+                    if (tval.name === activeTags["CriticalThinking"]) {
+                      return (
+                        <p
+                          className="mb-3 rounded-md border border-dashed border-zinc-400 px-4 py-3 text-sm font-medium"
+                          key={tval.name}
+                        >
+                          <span className="font-semibold">
+                            {`${tval.name}`}:&nbsp;&nbsp;
+                          </span>
+                          {tval.explanation === "" ? (
+                            <SkeletonCard />
+                          ) : (
+                            tval.explanation
+                          )}
+                        </p>
+                      )
+                    }
+                    return null // Render nothing if the tag is not active
+                  })}
+                </CardContent>
+              </Card>
+              // </CarouselItem>
+            )}
+            {filterSkills.Cognitive.tags.length > 0 && (
+              // <CarouselItem>
+              <Card className="size-full">
+                <CardHeader>
+                  <CardTitle>Cognitive</CardTitle>
+                  <div className="flex w-full flex-wrap gap-x-4 gap-y-2">
+                    {filterSkills.Cognitive.tags.map((val, i) => (
+                      <SkillTag
+                        skill={val}
+                        key={i}
+                        onClick={() => handleTagClick("Cognitive", val.name)}
+                      />
+                    ))}
+                  </div>
+                </CardHeader>
+                <CardContent>
+                  {/* {filterSkills.Cognitive.tags.map((tval: Tag) => {
                         return (
-                          <p className="mb-3 rounded-md border border-dashed border-zinc-400 px-4 py-3 font-medium">
+                          <p className="mb-3 rounded-md border border-dashed border-zinc-400 px-4 py-3 font-medium text-sm">
                             <span className="font-semibold">
                               {`${tval.name}`}:&nbsp;&nbsp;
                             </span>
@@ -787,26 +884,52 @@ export default function Home() {
                             )}
                           </p>
                         )
-                      })}
-                    </CardContent>
-                  </Card>
-                </CarouselItem>
-              )}
-              {filterSkills.Collaboration.tags.length > 0 && (
-                <CarouselItem>
-                  <Card className="size-full">
-                    <CardHeader>
-                      <CardTitle>Collaboration</CardTitle>
-                      <div className="flex w-full gap-4">
-                        {filterSkills.Collaboration.tags.map((val, i) => (
-                          <SkillTag skill={val} key={i} />
-                        ))}
-                      </div>
-                    </CardHeader>
-                    <CardContent>
-                      {filterSkills.Collaboration.tags.map((tval: Tag) => {
+                      })} */}
+                  {filterSkills.Cognitive.tags.map((tval: Tag) => {
+                    if (tval.name === activeTags["Cognitive"]) {
+                      return (
+                        <p
+                          className="mb-3 rounded-md border border-dashed border-zinc-400 px-4 py-3 text-sm font-medium"
+                          key={tval.name}
+                        >
+                          <span className="font-semibold">
+                            {`${tval.name}`}:&nbsp;&nbsp;
+                          </span>
+                          {tval.explanation === "" ? (
+                            <SkeletonCard />
+                          ) : (
+                            tval.explanation
+                          )}
+                        </p>
+                      )
+                    }
+                    return null // Render nothing if the tag is not active
+                  })}
+                </CardContent>
+              </Card>
+              // </CarouselItem>
+            )}
+            {filterSkills.Collaboration.tags.length > 0 && (
+              // <CarouselItem>
+              <Card className="size-full">
+                <CardHeader>
+                  <CardTitle>Collaboration</CardTitle>
+                  <div className="flex w-full flex-wrap gap-x-4 gap-y-2">
+                    {filterSkills.Collaboration.tags.map((val, i) => (
+                      <SkillTag
+                        skill={val}
+                        key={i}
+                        onClick={() =>
+                          handleTagClick("Collaboration", val.name)
+                        }
+                      />
+                    ))}
+                  </div>
+                </CardHeader>
+                <CardContent>
+                  {/* {filterSkills.Collaboration.tags.map((tval: Tag) => {
                         return (
-                          <p className="mb-3 rounded-md border border-dashed border-zinc-400 px-4 py-3 font-medium">
+                          <p className="mb-3 rounded-md border border-dashed border-zinc-400 px-4 py-3 font-medium text-sm">
                             <span className="font-semibold">
                               {`${tval.name}`}:&nbsp;&nbsp;
                             </span>
@@ -817,26 +940,51 @@ export default function Home() {
                             )}
                           </p>
                         )
-                      })}
-                    </CardContent>
-                  </Card>
-                </CarouselItem>
-              )}
-              {filterSkills.Character.tags.length > 0 && (
-                <CarouselItem>
-                  <Card className="size-full">
-                    <CardHeader>
-                      <CardTitle>Character</CardTitle>
-                      <div className="flex w-full gap-4">
-                        {filterSkills.Character.tags.map((val, i) => (
-                          <SkillTag skill={val} key={i} />
-                        ))}
-                      </div>
-                    </CardHeader>
-                    <CardContent>
-                      {filterSkills.Character.tags.map((tval: Tag) => {
+                      })} */}
+
+                  {filterSkills.Collaboration.tags.map((tval: Tag) => {
+                    if (tval.name === activeTags["Collaboration"]) {
+                      return (
+                        <p
+                          className="mb-3 rounded-md border border-dashed border-zinc-400 px-4 py-3 text-sm font-medium"
+                          key={tval.name}
+                        >
+                          <span className="font-semibold">
+                            {`${tval.name}`}:&nbsp;&nbsp;
+                          </span>
+                          {tval.explanation === "" ? (
+                            <SkeletonCard />
+                          ) : (
+                            tval.explanation
+                          )}
+                        </p>
+                      )
+                    }
+                    return null // Render nothing if the tag is not active
+                  })}
+                </CardContent>
+              </Card>
+              // </CarouselItem>
+            )}
+            {filterSkills.Character.tags.length > 0 && (
+              // <CarouselItem>
+              <Card className="size-full">
+                <CardHeader>
+                  <CardTitle>Character</CardTitle>
+                  <div className="flex w-full flex-wrap gap-x-4 gap-y-2">
+                    {filterSkills.Character.tags.map((val, i) => (
+                      <SkillTag
+                        skill={val}
+                        key={i}
+                        onClick={() => handleTagClick("Character", val.name)}
+                      />
+                    ))}
+                  </div>
+                </CardHeader>
+                <CardContent>
+                  {/* {filterSkills.Character.tags.map((tval: Tag) => {
                         return (
-                          <p className="mb-3 rounded-md border border-dashed border-zinc-400 px-4 py-3 font-medium">
+                          <p className="mb-3 rounded-md border border-dashed border-zinc-400 px-4 py-3 font-medium text-sm">
                             <span className="font-semibold">
                               {`${tval.name}`}:&nbsp;&nbsp;
                             </span>
@@ -847,18 +995,39 @@ export default function Home() {
                             )}
                           </p>
                         )
-                      })}
-                    </CardContent>
-                  </Card>
-                </CarouselItem>
-              )}
-            </CarouselContent>
-            {/* <div className="text-center text-lg font-semibold text-black">
+                      })} */}
+                  {filterSkills.Character.tags.map((tval: Tag) => {
+                    if (tval.name === activeTags["Character"]) {
+                      return (
+                        <p
+                          className="mb-3 rounded-md border border-dashed border-zinc-400 px-4 py-3 text-sm font-medium"
+                          key={tval.name}
+                        >
+                          <span className="font-semibold">
+                            {`${tval.name}`}:&nbsp;&nbsp;
+                          </span>
+                          {tval.explanation === "" ? (
+                            <SkeletonCard />
+                          ) : (
+                            tval.explanation
+                          )}
+                        </p>
+                      )
+                    }
+                    return null // Render nothing if the tag is not active
+                  })}
+                </CardContent>
+              </Card>
+              // </CarouselItem>
+            )}
+          </div>
+          {/* </CarouselContent> */}
+          {/* <div className="text-center text-lg font-semibold text-black">
               {current} <span className="font-normal">/</span> {count}
             </div> */}
-            <CarouselPrevious />
-            <CarouselNext />
-          </Carousel>
+          {/* <CarouselPrevious />
+            <CarouselNext /> */}
+          {/* </Carousel> */}
           {!loading && (
             <Button
               onClick={handlePrint}
@@ -875,7 +1044,7 @@ export default function Home() {
               <Image
                 unoptimized
                 priority
-                src="/logo_new.png"
+                src="/shikha-labs.png"
                 height={150}
                 width={150}
                 alt="Logo"
@@ -884,16 +1053,16 @@ export default function Home() {
             <h1 className="mb-3 block text-xl font-extrabold underline underline-offset-4">
               Project Skills Tagger
             </h1>
-            <div className="header hidden print:fixed print:bottom-0 print:right-0 print:block">
+            {/* <div className="header hidden print:fixed print:bottom-0 print:right-0 print:block">
               <Image
                 unoptimized
                 priority
-                src="/logo_new.png"
+                src="/shikha-labs.png"
                 height={150}
                 width={150}
                 alt="Logo"
               />
-            </div>
+            </div> */}
             <div className="hidden print:mb-6 print:block print:rounded-md print:border print:border-zinc-300 print:bg-zinc-100 print:p-2 print:px-4 print:text-lg">
               <div className="flex gap-3">
                 <span className="font-bold">Name:</span>
@@ -916,7 +1085,7 @@ export default function Home() {
               <Card className="size-full print:break-after-page">
                 <CardHeader>
                   <CardTitle>Communication</CardTitle>
-                  <div className="flex w-full gap-4">
+                  <div className="flex w-full flex-wrap gap-x-4 gap-y-2">
                     {filterSkills.Communication.tags.map((val, i) => (
                       <SkillTag skill={val} key={i} />
                     ))}
@@ -946,7 +1115,7 @@ export default function Home() {
               <Card className="size-full print:break-after-page">
                 <CardHeader>
                   <CardTitle>Creativity</CardTitle>
-                  <div className="flex w-full gap-4">
+                  <div className="flex w-full flex-wrap gap-x-4 gap-y-2">
                     {filterSkills.Creativity.tags.map((val, i) => (
                       <SkillTag skill={val} key={i} />
                     ))}
@@ -976,7 +1145,7 @@ export default function Home() {
               <Card className="size-full print:break-after-page">
                 <CardHeader>
                   <CardTitle>Critical Thinking</CardTitle>
-                  <div className="flex w-full gap-4">
+                  <div className="flex w-full flex-wrap gap-x-4 gap-y-2">
                     {filterSkills.CriticalThinking.tags.map((val, i) => (
                       <SkillTag skill={val} key={i} />
                     ))}
@@ -1006,7 +1175,7 @@ export default function Home() {
               <Card className="size-full print:break-after-page">
                 <CardHeader>
                   <CardTitle>Cognitive</CardTitle>
-                  <div className="flex w-full gap-4">
+                  <div className="flex w-full flex-wrap gap-x-4 gap-y-2">
                     {filterSkills.Cognitive.tags.map((val, i) => (
                       <SkillTag skill={val} key={i} />
                     ))}
@@ -1036,7 +1205,7 @@ export default function Home() {
               <Card className="size-full print:break-after-page">
                 <CardHeader>
                   <CardTitle>Collaboration</CardTitle>
-                  <div className="flex w-full gap-4">
+                  <div className="flex w-full flex-wrap gap-x-4 gap-y-2">
                     {filterSkills.Collaboration.tags.map((val, i) => (
                       <SkillTag skill={val} key={i} />
                     ))}
@@ -1066,7 +1235,7 @@ export default function Home() {
               <Card className="size-full print:break-after-page">
                 <CardHeader>
                   <CardTitle>Character</CardTitle>
-                  <div className="flex w-full gap-4">
+                  <div className="flex w-full flex-wrap gap-x-4 gap-y-2">
                     {filterSkills.Character.tags.map((val, i) => (
                       <SkillTag skill={val} key={i} />
                     ))}

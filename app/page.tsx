@@ -1051,7 +1051,7 @@ export default function Home() {
               />
             </div>
             <h1 className="mb-3 block text-xl font-extrabold underline underline-offset-4">
-              Project Skills Tagger
+              Student Portfolio Analyzer
             </h1>
             {/* <div className="header hidden print:fixed print:bottom-0 print:right-0 print:block">
               <Image

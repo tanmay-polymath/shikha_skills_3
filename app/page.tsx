@@ -61,32 +61,32 @@ export default function Home() {
     newObj = {
       Character: {
         ...currSkills!.Character,
-        tags: currSkills!.Character.tags.filter((val: Tag) => val.score >= 90),
+        tags: currSkills!.Character.tags.filter((val: Tag) => val.score >= 80),
       },
       Cognitive: {
         ...currSkills!.Cognitive,
-        tags: currSkills!.Cognitive.tags.filter((val: Tag) => val.score >= 90),
+        tags: currSkills!.Cognitive.tags.filter((val: Tag) => val.score >= 80),
       },
       Collaboration: {
         ...currSkills!.Collaboration,
         tags: currSkills!.Collaboration.tags.filter(
-          (val: Tag) => val.score >= 90
+          (val: Tag) => val.score >= 80
         ),
       },
       Communication: {
         ...currSkills!.Communication,
         tags: currSkills!.Communication.tags.filter(
-          (val: Tag) => val.score >= 90
+          (val: Tag) => val.score >= 80
         ),
       },
       Creativity: {
         ...currSkills!.Creativity,
-        tags: currSkills!.Creativity.tags.filter((val: Tag) => val.score >= 90),
+        tags: currSkills!.Creativity.tags.filter((val: Tag) => val.score >= 80),
       },
       CriticalThinking: {
         ...currSkills!.CriticalThinking,
         tags: currSkills!.CriticalThinking.tags.filter(
-          (val: Tag) => val.score >= 90
+          (val: Tag) => val.score >= 80
         ),
       },
     }
@@ -664,7 +664,7 @@ export default function Home() {
           <div className="mx-auto my-0 flex w-full max-w-6xl items-center space-x-2">
             <Switch onCheckedChange={toggle} id="airplane-mode" />
             <Label htmlFor="airplane-mode">
-              Filter skills (score {`>`} 90)
+              Filter skills (score {`>=`} 80)
             </Label>
           </div>
           <Carousel

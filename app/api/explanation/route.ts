@@ -9,7 +9,7 @@ export async function POST(request: NextRequest) {
     console.log("openai explain api hit")
     const body = await request.json()
 
-    console.log(body)
+    // console.log(body)
 
     const mssg: string = body.message
     const reqSkill: string = body.skill
@@ -20,7 +20,6 @@ export async function POST(request: NextRequest) {
 
     const res = await openai.chat.completions.create({
       model: "gpt-3.5-turbo",
-      // temperature: 0.3,
       messages: [
         {
           role: "system",
